@@ -1,10 +1,85 @@
-# Todo List
+# TodoApp
 
-A simple todo list built with Next.js 15, Prisma, and PostgreSQL.
+A simple todo list application built with Next.js, Better-Auth, and Prisma Postgres.
 
-## Getting Started
+## 🚀 Tech Stack
 
-First, run the development server:
+- **Frontend**: [Next.js](https://nextjs.org/)
+- **Database**: [Prisma Postgres](https://www.prisma.io/postgres)
+- **Authentication**: [Better-Auth](https://www.better-auth.com/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Drag & Drop**: [dnd-kit](https://dndkit.com/)
+
+## ✨ Features
+
+- 📝 Create, edit, and delete todos
+- ✅ Mark tasks as complete/incomplete
+- 🎯 Drag and drop to reorder tasks
+- 👤 Secure user authentication
+- 🔄 Real-time synchronization
+- 📱 Responsive design
+- 🎨 Beautiful notebook-inspired UI
+
+## 🛠️ Setup Instructions
+
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, pnpm, or bun
+
+### 1. Clone and Install
+
+```bash
+git clone <your-repo-url>
+cd nextjs_with_prisma_and_better_auth
+npm install
+```
+
+### 2. Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Database
+DATABASE_URL="your_postgres_connection_string"
+
+# Authentication
+BETTER_AUTH_SECRET="your_secret_key"
+```
+
+### 3. Get Your API Keys
+
+#### Database URL (Prisma Postgres)
+
+Create a new Prisma Postgres database:
+
+```bash
+npx create-db
+```
+
+Follow the prompts and copy the Prisma Postgres connection string to your `.env` file as `DATABASE_URL`.
+
+📖 **More info**: [Prisma Postgres Documentation](https://www.prisma.io/docs/postgres/introduction/npx-create-db)
+
+#### Better Auth Secret
+
+Generate a secure secret for Better Auth:
+
+```bash
+npx @better-auth/cli@latest secret
+```
+
+Copy the generated secret to your `.env` file as `BETTER_AUTH_SECRET`.
+
+### 4. Database Setup
+
+Run Prisma migrations to set up your database:
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Start Development Server
 
 ```bash
 npm run dev
@@ -16,23 +91,71 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see your TodoApp!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js app router
+│   ├── api/               # API routes
+│   ├── dashboard/         # Dashboard page
+│   ├── sign-in/          # Authentication pages
+│   └── sign-up/
+├── components/            # React components
+│   └── TodoList.tsx      # Main todo component
+└── lib/                  # Utilities
+    ├── auth.ts           # Auth configuration
+    ├── auth-client.ts    # Client-side auth
+    └── prisma.ts         # Database client
 
-## Learn More
+prisma/
+├── schema.prisma         # Database schema
+└── migrations/           # Database migrations
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy on Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The easiest way to deploy is using the [Vercel Platform](https://vercel.com/new):
 
-## Deploy on Vercel
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Add your environment variables in Vercel dashboard
+4. Deploy!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Environment Variables for Production
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Make sure to set these in your deployment platform:
+
+- `DATABASE_URL`: Your production Postgres connection string
+- `BETTER_AUTH_SECRET`: Your Better Auth secret key
+
+## 🔧 Development
+
+### Database Commands
+
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Run migrations
+npx prisma migrate dev
+
+# View database in Prisma Studio
+npx prisma studio
+```
+
+### Useful Scripts
+
+```bash
+# Development
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start
+```
