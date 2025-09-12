@@ -193,9 +193,8 @@ function TodoItem({
           {/* Toggle action (right side) */}
           {swipeX > 0 && (
             <div
-              className={`absolute inset-0 rounded-lg ${
-                todo.completed ? 'bg-blue-500' : 'bg-green-500'
-              }`}
+              className={`absolute inset-0 rounded-lg ${todo.completed ? 'bg-blue-500' : 'bg-green-500'
+                }`}
               style={{
                 opacity: Math.min(1, Math.abs(swipeX) / 60)
               }}
@@ -219,12 +218,12 @@ function TodoItem({
           className="cursor-grab active:cursor-grabbing p-1 text-black hover:text-gray-700 transition-colors"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <circle cx="9" cy="12" r="1.5"/>
-            <circle cx="9" cy="6" r="1.5"/>
-            <circle cx="9" cy="18" r="1.5"/>
-            <circle cx="15" cy="12" r="1.5"/>
-            <circle cx="15" cy="6" r="1.5"/>
-            <circle cx="15" cy="18" r="1.5"/>
+            <circle cx="9" cy="12" r="1.5" />
+            <circle cx="9" cy="6" r="1.5" />
+            <circle cx="9" cy="18" r="1.5" />
+            <circle cx="15" cy="12" r="1.5" />
+            <circle cx="15" cy="6" r="1.5" />
+            <circle cx="15" cy="18" r="1.5" />
           </svg>
         </div>
         <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -233,8 +232,8 @@ function TodoItem({
             checked={todo.completed}
             onChange={() => onToggle(todo.id, todo.completed)}
             className={`w-5 h-5 rounded-md border-2 flex-shrink-0 ${todo.completed
-                ? 'bg-green-500 border-green-500 text-white'
-                : 'border-gray-300 hover:border-blue-400 focus:ring-2 focus:ring-blue-300'
+              ? 'bg-green-500 border-green-500 text-white'
+              : 'border-gray-300 hover:border-blue-400 focus:ring-2 focus:ring-blue-300'
               } transition-colors`}
           />
           {isEditing ? (
@@ -252,8 +251,8 @@ function TodoItem({
               title={todo.title}
               onClick={() => onEdit(todo)}
               className={`flex-1 truncate text-lg font-medium min-w-0 cursor-pointer hover:bg-gray-50 hover:px-2 hover:py-1 hover:rounded transition-all duration-150 ${todo.completed
-                  ? 'line-through text-gray-400'
-                  : 'text-gray-700'
+                ? 'line-through text-gray-400'
+                : 'text-gray-700'
                 }`}
             >
               {todo.title}
@@ -280,7 +279,7 @@ function TodoItem({
 function formatTimeAgo(date: Date): string {
   const now = new Date()
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-  
+
   if (diffInSeconds < 10) return 'just now'
   if (diffInSeconds < 60) return `${diffInSeconds}s ago`
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`
@@ -525,8 +524,8 @@ export default function TodoList() {
 
       // If moving between sections, update completed status
       if (movingBetweenSections) {
-        newTodos = newTodos.map(todo => 
-          todo.id === activeId 
+        newTodos = newTodos.map(todo =>
+          todo.id === activeId
             ? { ...todo, completed: overTodo.completed }
             : todo
         )
@@ -540,11 +539,11 @@ export default function TodoList() {
       // Assign order values that match the descending sort (b.order - a.order)
       // Higher order values appear first, so first item gets highest order
       const maxOrder = Math.max(1000, (activeTodosInOrder.length + completedTodosInOrder.length) * 10)
-      
+
       activeTodosInOrder.forEach((todo, index) => {
         todo.order = maxOrder - (index * 10) // First item gets maxOrder, second gets maxOrder-10, etc.
       })
-      
+
       completedTodosInOrder.forEach((todo, index) => {
         todo.order = maxOrder - (activeTodosInOrder.length * 10) - (index * 10)
       })
@@ -562,7 +561,7 @@ export default function TodoList() {
     setIsSyncing(true)
     try {
       console.log('Starting database update...')
-      
+
       // First update completed status if moving between sections
       if (movingBetweenSections) {
         await fetch(`/api/todos/${activeId}`, {
@@ -573,9 +572,9 @@ export default function TodoList() {
       }
 
       // Update ALL todos' order values in the database to ensure complete consistency
-      const allOrderUpdates = newTodosState.map(todo => ({ 
-        id: todo.id, 
-        order: todo.order 
+      const allOrderUpdates = newTodosState.map(todo => ({
+        id: todo.id,
+        order: todo.order
       }))
 
       console.log(`Sending ${allOrderUpdates.length} order updates to database`)
@@ -583,7 +582,7 @@ export default function TodoList() {
       const reorderResponse = await fetch('/api/todos/reorder', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           updates: allOrderUpdates
         })
       })
@@ -623,12 +622,12 @@ export default function TodoList() {
 
     // Store the trimmed text
     const trimmedTitle = editText.trim()
-    
+
     setEditingId(null)
     setEditText('')
 
     // Optimistic update - only update the title, preserve everything else
-    setTodos(prev => prev.map(todo => 
+    setTodos(prev => prev.map(todo =>
       todo.id === id ? { ...todo, title: trimmedTitle } : todo
     ))
 
@@ -643,7 +642,7 @@ export default function TodoList() {
       if (!response.ok) {
         console.error('Failed to update todo on server')
         // Revert on failure - restore original title
-        setTodos(prev => prev.map(todo => 
+        setTodos(prev => prev.map(todo =>
           todo.id === id ? { ...todo, title: originalTodo.title } : todo
         ))
       } else {
@@ -653,7 +652,7 @@ export default function TodoList() {
     } catch (error) {
       console.error('Error updating todo:', error)
       // Revert on failure - restore original title
-      setTodos(prev => prev.map(todo => 
+      setTodos(prev => prev.map(todo =>
         todo.id === id ? { ...todo, title: originalTodo.title } : todo
       ))
     } finally {
@@ -859,21 +858,21 @@ export default function TodoList() {
           </div>
         </div>
       </div>
-      
+
       <DragOverlay>
         {draggedTodo ? (
           <div className="transform rotate-3 shadow-2xl">
             <TodoItem
               todo={draggedTodo}
-              onToggle={() => {}}
-              onDelete={() => {}}
-              onEdit={() => {}}
+              onToggle={() => { }}
+              onDelete={() => { }}
+              onEdit={() => { }}
               isEditing={false}
               editText=""
-              onEditTextChange={() => {}}
-              onEditSave={() => {}}
-              onEditCancel={() => {}}
-              onEditKeyDown={() => {}}
+              onEditTextChange={() => { }}
+              onEditSave={() => { }}
+              onEditCancel={() => { }}
+              onEditKeyDown={() => { }}
             />
           </div>
         ) : null}
