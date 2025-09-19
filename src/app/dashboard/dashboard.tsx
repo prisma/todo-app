@@ -2,18 +2,20 @@
 
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
+import type { Session } from "@/lib/auth";
 import { useEffect } from "react";
 import TodoList from '@/components/TodoList'
 
-export default function Dashboard() {
+export default function Dashboard({ initSession }: { initSession: Session }) {
   const router = useRouter();
-  const { data: session, isPending } = useSession();
+  const { data, isPending } = useSession();
+  const session = data || initSession
 
   useEffect(() => {
-    if (!isPending && !session?.user) {
+    if (!isPending && !data) {
       router.push("/sign-in");
     }
-  }, [isPending, session, router]);
+  }, [isPending, data, router]);
 
   const handleLogout = async () => {
     await signOut();
@@ -31,7 +33,7 @@ export default function Dashboard() {
     );
   }
 
-  if (!session?.user) {
+  if (!isPending && !data) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
         <div className="text-center">

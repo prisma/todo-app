@@ -27,3 +27,5 @@ export const auth = betterAuth({
   },
   baseURL: getBaseUrl(),
 });
+
+export type Session = typeof auth.$Infer.Session;
