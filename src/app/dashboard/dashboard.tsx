@@ -3,19 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import type { Session } from "@/lib/auth";
-import { useEffect } from "react";
 import TodoList from '@/components/TodoList'
 
 export default function Dashboard({ initSession }: { initSession: Session }) {
   const router = useRouter();
   const { data, isPending } = useSession();
   const session = data || initSession
-
-  useEffect(() => {
-    if (!isPending && !data) {
-      router.push("/sign-in");
-    }
-  }, [isPending, data, router]);
 
   const handleLogout = async () => {
     await signOut();
