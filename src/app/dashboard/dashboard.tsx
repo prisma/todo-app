@@ -50,9 +50,9 @@ export default function Dashboard({ initSession }: { initSession: Session }) {
             {/* User Info and Logout */}
             <div className="flex items-center space-x-4">
               {session?.user?.image && (
-                <img 
-                  src={session.user.image} 
-                  alt={session.user.name || 'User'} 
+                <img
+                  src={session.user.image}
+                  alt={session.user.name || 'User'}
                   className="w-8 h-8 rounded-full border-2 border-amber-300"
                 />
               )}
