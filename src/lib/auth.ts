@@ -26,6 +26,48 @@ export const auth = betterAuth({
     enabled: true,
   },
   baseURL: getBaseUrl(),
+  trustedOrigins: process.env.VERCEL
+    ? (request) => {
+        // In Vercel, dynamically allow deployment URLs
+        const origin = request.headers.get("origin") || "";
+        const defaultOrigins = [
+          "http://localhost:3000",
+          // Current deployment URL
+          ...(process.env.VERCEL_URL
+            ? [`https://${process.env.VERCEL_URL}`]
+            : []),
+          // Branch URL for preview deployments
+          ...(process.env.VERCEL_BRANCH_URL
+            ? [`https://${process.env.VERCEL_BRANCH_URL}`]
+            : []),
+          // Production URL
+          ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+            ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
+            : []),
+          // Custom trusted origins
+          ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS
+            ? process.env.BETTER_AUTH_TRUSTED_ORIGINS.split(",").map((origin) =>
+                origin.trim()
+              )
+            : []),
+        ];
+
+        // Allow any Vercel deployment URL for this project (*.vercel.app)
+        const isVercelUrl = origin.includes(".vercel.app");
+
+        return [...defaultOrigins, ...(isVercelUrl ? [origin] : [])];
+      }
+    : [
+        "http://localhost:3000",
+        ...(process.env.VERCEL_URL
+          ? [`https://${process.env.VERCEL_URL}`]
+          : []),
+        ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS
+          ? process.env.BETTER_AUTH_TRUSTED_ORIGINS.split(",").map((origin) =>
+              origin.trim()
+            )
+          : []),
+      ],
 });
 
 export type Session = typeof auth.$Infer.Session;
